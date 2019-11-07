@@ -23,7 +23,6 @@ config_schema:
 cdefs:
   MGOS_ENABLE_WEB_CONFIG: 0
   MGOS_ENABLE_FILE_UPLOAD: 1
-  MGOS_ENABLE_TUNNEL: 0
 
 init_after:
   - atca
@@ -36,6 +35,9 @@ tags:
   - net
   - docs:net:HTTP server
 
-# Temporary, while root manifest change propagates (2018/03/29).
-libs:
-  - origin: https://github.com/mongoose-os-libs/core
+conds:
+  - when: mos.platform == "ubuntu"
+    apply:
+      config_schema:
+        # Binding to higher ports requires elevated privileges.
+        - ["http.listen_addr", "8080"]
